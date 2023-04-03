@@ -22,8 +22,17 @@ def create_artifact(config):
 
 def task_rnn(config):
     path = "data_cut/"
-    train_loader, test_loader = data_utils.get_dataloaders(path, config['batch_size'], 44100, config['device'])
-    model = models.RNN(56, 1, 3, 3, config['device'])
+    train_loader, test_loader = data_utils.get_dataloaders(path,config)
+    model = models.RNN(56, 3, 3, num_classes = 2, device = config['device'])
+    optimizer = torch.optim.Adam(model.parameters(), lr=config['lr'])
+    criterion = torch.nn.CrossEntropyLoss()
+    model, train_losses, test_losses, test_accs = utils.training_loop(model, train_loader, test_loader, optimizer, criterion, config['epochs'], config['device'])
+    return model, train_losses, test_losses, test_accs
+
+def task_cnn(config):
+    path = "data_cut/"
+    train_loader, test_loader = data_utils.get_dataloaders(path, config)
+    model = models.CNN()
     optimizer = torch.optim.Adam(model.parameters(), lr=config['lr'])
     criterion = torch.nn.CrossEntropyLoss()
     model, train_losses, test_losses, test_accs = utils.training_loop(model, train_loader, test_loader, optimizer, criterion, config['epochs'], config['device'])
