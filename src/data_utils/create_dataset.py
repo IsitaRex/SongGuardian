@@ -12,6 +12,7 @@ class SongsDataset(Dataset):
         self.dislike = self._count_files_in_directory(self.path + '/Dislike')
         self.device = device
         self.sample_rate = sample_rate
+        self.use_mfcc = True
 
     def __len__(self):
         return self.like + self.dislike
@@ -19,8 +20,16 @@ class SongsDataset(Dataset):
     def __getitem__(self, idx):
         song_sample, sr, label = self._get_sample_file(idx)
         song_sample = self._mix_down(song_sample)
-        # breakpoint()
-        song_sample = self._get_mfcc_features(song_sample, self.sample_rate)
+        if self.use_mfcc:
+          song_sample = self._get_mfcc_features(song_sample, sr)
+        else:
+          mel_spectrogram = torchaudio.transforms.MelSpectrogram(
+            sample_rate=self.sample_rate,
+            n_fft=1024,
+            hop_length=512,
+            n_mels=64
+          )
+          song_sample = mel_spectrogram(song_sample)
         return song_sample, label
 
     def _get_mfcc_features(self, signal, sample_rate):
@@ -78,7 +87,11 @@ class SongsDataset(Dataset):
             song_sample = torch.mean(song_sample, 0, True)
         return song_sample
 
-def get_dataloaders(path, batch_size, sample_rate, device):
+def get_dataloaders(path, config):
+    
+    batch_size = config['batch_size']
+    sample_rate = config['sample_rate']
+    device = config['device']
     dataset = SongsDataset(path, sample_rate=sample_rate, device=device)
     train_size = int(0.8 * len(dataset))
     test_size = len(dataset) - train_size
@@ -100,11 +113,4 @@ if __name__ == '__main__':
   mel_spectrogram = torchaudio.transforms.MelSpectrogram(sample_rate=SAMPLE_RATE)
   mfcc = torchaudio.transforms.MFCC(sample_rate=SAMPLE_RATE)
   dataset = SongsDataset('data_cut', sample_rate= SAMPLE_RATE, device= DEVICE)
-  print(dataset[0][1])
-
-  #test dataloader
-  train_loader, test_loader = get_dataloaders(PATH, 32, SAMPLE_RATE, DEVICE)
-  for i, (x, y) in enumerate(train_loader):
-    print(x.shape)
-    print(y)
-    break
+  # print(dataset[0][1])
