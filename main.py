@@ -25,10 +25,10 @@ def main(config: dict):
         utils.create_artifact(config)
     elif config["task"] == "RNN":
         utils.task_rnn(config)
-    elif config["task"] == "RNN":
-        utils.task_rnn(config)
+    elif config["task"] == "CNN":
+        utils.task_cnn(config)
     else:
-        print("Task not found.")
+        raise ValueError("Task not found.")
 
     wandb.finish()
 
