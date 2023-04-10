@@ -1,5 +1,7 @@
 # SongGuardian :drum:
  
+ :warning: UNDER DEVELOPMENT :warning:
+ 
 Music plays a great role in peoples life and influences different parts of the daily routine such as the mood or the performance in sports, study, work, etc. Therefore, in the contemporary era of information many researchers have dedicated their work to improving music recommendation systems that enable people to find new music or allow artists to reach a wider public.
 
 This work emerges from the hypothesis that not all humans are sensitive to the same features and that the first question should be instead, what makes us like or dislike music?
@@ -52,11 +54,7 @@ which receives a list of
 [layers](https://github.com/IsitaRex/Supervising-My-Musical-Taste/blob/810f596b126773d3c525ab098154cfee992d2f46/Multilayer%20Perceptron/Layer.py) and a learning rate.
 
 ### Example model
-To create a MLP with one hidden layer, 80 inputs, one output, Sigmoid activation functions and a learning rate of 0.1 use:
+To train a RNN with 100 epochs, a batch size of 32 and learning rate of 0.1 run:
 ```
-model = MLP(layers = [Layer(80, 1, activation = 'Sigmoid'),Layer(1, 1, activation = 'Sigmoid'),Layer(1, 1, activation = 'Sigmoid')], learning_rate = 0.1)
-```
-To train the model
-```
-model.train(X_train.T, y_train.T, epochs = 50)
+python main.py --epochs 100 --batch_size 32 --lr 0.1
 ```
