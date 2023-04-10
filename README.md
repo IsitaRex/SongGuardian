@@ -47,14 +47,17 @@ For my experiment, all the features were stored as a pickle file
 The results with learning machines can be found at the following notebook :
 [Notebook  :musical_keyboard:](supervising_my_musical_taste.ipynb)
 
-## Multilayer Perceptron (MLP) :musical_note:
-In order to supervise the learning process of my musical taste I used a self created 
-[Multilayer Perceptron ](https://github.com/IsitaRex/Supervising-My-Musical-Taste/blob/810f596b126773d3c525ab098154cfee992d2f46/Multilayer%20Perceptron/MLP.py)
-which receives a list of 
-[layers](https://github.com/IsitaRex/Supervising-My-Musical-Taste/blob/810f596b126773d3c525ab098154cfee992d2f46/Multilayer%20Perceptron/Layer.py) and a learning rate.
+## Models :musical_note:
 
-### Example model
+### RNN
 To train a RNN with 100 epochs, a batch size of 32 and learning rate of 0.1 run:
 ```
-python main.py --epochs 100 --batch_size 32 --lr 0.1
+python main.py --epochs 100 --batch_size 32 --lr 0.1 --task RNN
+```
+
+### CNN
+
+To train a CNN with 100 epochs, a batch size of 32 and learning rate of 0.1 run:
+```
+python main.py --epochs 100 --batch_size 32 --lr 0.1 --task CNN
 ```
