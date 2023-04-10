@@ -97,11 +97,10 @@ venv.bak/
 
 
 
-data/
-data_cut/
+*.wav
 wandb/
 __pycache__/
-.mp3
+*.mp3
 /outputs/
-.png
-.pckl
+*.png
+*.pckl
