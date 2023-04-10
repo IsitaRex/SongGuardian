@@ -5,6 +5,21 @@ from sklearn.metrics import f1_score, precision_score, recall_score
 
 
 def train(model, train_loader, optimizer, criterion, epoch, device):
+  '''
+  Train the model.
+
+  Args:
+    model: model to train
+    train_loader: train dataloader
+    optimizer: optimizer
+    criterion: loss function
+    epoch: epoch number
+    device: device to use
+
+  Returns:
+    model: trained model
+    train_loss: train loss
+  '''
   model.train()
   train_loss = 0
   ii  = 0
@@ -31,6 +46,24 @@ def train(model, train_loader, optimizer, criterion, epoch, device):
  
 
 def test(model, test_loader, criterion, device):
+  '''
+  Test the model.
+  
+  Args:
+    model: model to test
+    test_loader: test dataloader
+    criterion: loss function
+    device: device to use
+  Returns:
+    model: model
+    test_loss: loss
+    correct: number of correct predictions
+    f1: f1 score
+    precision: precision score
+    recall: recall score
+  '''
+  # TODO: add confusion matrix and log it to wandb
+
   model.eval()
   test_loss = 0
   correct = 0
@@ -53,6 +86,24 @@ def test(model, test_loader, criterion, device):
   return model, test_loss, correct, f1, precision, recall
 
 def training_loop(model, train_loader, test_loader, optimizer, criterion, epochs, device):
+  '''
+  Training loop for the model.
+
+  Args:
+    model: model to train
+    train_loader: train dataloader
+    test_loader: test dataloader
+    optimizer: optimizer to use
+    criterion: loss function
+    epochs: number of epochs to train for
+    device: device to train on
+  
+  Returns:
+    model: trained model
+    train_losses: list of train losses
+    test_losses: list of test losses
+    test_accs: list of test accuracies
+  '''
   train_losses = []
   test_losses = []
   test_accs = []
