@@ -14,14 +14,14 @@ def create_artifact(config):
     # create an artifact for the data
     data_artifact = wandb.Artifact('data', type='dataset')
     # add the mp3 files to the artifact and the labels
-    data_artifact.add_dir('data_cut/Like', name='data/Like')
-    data_artifact.add_dir('data_cut/Dislike', name='data/Dislike')
+    data_artifact.add_dir('data/Like', name='data/Like')
+    data_artifact.add_dir('data/Dislike', name='data/Dislike')
     # log the artifact to wandb
     wandb.log_artifact(data_artifact)
 
 
 def task_rnn(config):
-    path = "data_cut/"
+    path = "data/"
     train_loader, test_loader = data_utils.get_dataloaders(path,config)
     model = models.RNN(56, 3, 3, num_classes = 2, device = config['device'])
     optimizer = torch.optim.Adam(model.parameters(), lr=config['lr'])
@@ -30,7 +30,7 @@ def task_rnn(config):
     return model, train_losses, test_losses, test_accs
 
 def task_cnn(config):
-    path = "data_cut/"
+    path = "data/"
     train_loader, test_loader = data_utils.get_dataloaders(path, config)
     model = models.CNN()
     optimizer = torch.optim.Adam(model.parameters(), lr=config['lr'])
