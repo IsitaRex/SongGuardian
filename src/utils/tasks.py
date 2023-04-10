@@ -21,6 +21,10 @@ def create_artifact(config):
 
 
 def task_rnn(config):
+    '''
+    Task to train a RNN model.
+    '''
+
     path = "data/"
     train_loader, test_loader = data_utils.get_dataloaders(path,config)
     model = models.RNN(56, 3, 3, num_classes = 2, device = config['device'])
@@ -30,6 +34,9 @@ def task_rnn(config):
     return model, train_losses, test_losses, test_accs
 
 def task_cnn(config):
+    '''
+    Task to train a CNN model.
+    '''
     path = "data/"
     train_loader, test_loader = data_utils.get_dataloaders(path, config)
     model = models.CNN()
