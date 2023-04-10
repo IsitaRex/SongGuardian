@@ -36,7 +36,11 @@ class SongsDataset(Dataset):
       '''
       This function takes the raw mfcc features and returns the mean and standard deviation
       '''
-      mfcc = torchaudio.transforms.MFCC(sample_rate=sample_rate, n_mfcc=14)(signal)
+      mfcc = torchaudio.transforms.MFCC(
+         sample_rate=sample_rate, 
+         n_mfcc=14,
+         melkwargs={"n_fft": 400, "hop_length": 160, "n_mels": 23, "center": False}
+      )(signal)
       mean = torch.mean(mfcc, dim=2)
       std = torch.std(mfcc, dim=2)
       mx = torch.max(mfcc, dim=2)[0]
@@ -101,7 +105,7 @@ def get_dataloaders(path, config):
     return train_loader, test_loader
 
 if __name__ == '__main__':
-  PATH = 'data_cut'
+  PATH = 'data'
   SAMPLE_RATE = 44100
   # parameters
   DEVICE = "cpu"
@@ -112,5 +116,5 @@ if __name__ == '__main__':
 
   mel_spectrogram = torchaudio.transforms.MelSpectrogram(sample_rate=SAMPLE_RATE)
   mfcc = torchaudio.transforms.MFCC(sample_rate=SAMPLE_RATE)
-  dataset = SongsDataset('data_cut', sample_rate= SAMPLE_RATE, device= DEVICE)
+  dataset = SongsDataset('data', sample_rate= SAMPLE_RATE, device= DEVICE)
   # print(dataset[0][1])
