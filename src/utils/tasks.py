@@ -31,10 +31,12 @@ def task_rnn(config):
     optimizer = torch.optim.Adam(model.parameters(), lr=config['lr'])
     criterion = torch.nn.CrossEntropyLoss()
     model, train_losses, test_losses, test_accs = utils.training_loop(model, train_loader, test_loader, optimizer, criterion, config['epochs'], config['device'])
+    # save the model in model directory
+    torch.save(model.state_dict(), "models/rnn.pt")
     return model, train_losses, test_losses, test_accs
 
 def task_cnn(config):
-    '''
+    '''S
     Task to train a CNN model.
     '''
     path = "data/"
