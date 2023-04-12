@@ -38,14 +38,17 @@ class SongsDataset(Dataset):
       '''
       mfcc = torchaudio.transforms.MFCC(
          sample_rate=sample_rate, 
-         n_mfcc=14,
-         melkwargs={"n_fft": 400, "hop_length": 160, "n_mels": 23, "center": False}
+         n_mfcc=20,
+         melkwargs={"n_fft": 400, "hop_length": 160, "n_mels": 30, "center": False}
       )(signal)
       mean = torch.mean(mfcc, dim=2)
       std = torch.std(mfcc, dim=2)
       mx = torch.max(mfcc, dim=2)[0]
       mn = torch.min(mfcc, dim=2)[0]
-      return torch.cat((mean, std, mx, mn), dim=1)
+      data = torch.cat((mean, std, mx, mn), dim=1)
+      # normalize data min max
+      data = (data - data.min()) / (data.max() - data.min())
+      return data
 
     
     def _count_files_in_directory(self, path):
