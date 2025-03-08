@@ -1,7 +1,5 @@
 # SongGuardian :drum:
- 
- :warning: UNDER DEVELOPMENT :warning:
- 
+
 Music plays a great role in peoples life and influences different parts of the daily routine such as the mood or the performance in sports, study, work, etc. Therefore, in the contemporary era of information many researchers have dedicated their work to improving music recommendation systems that enable people to find new music or allow artists to reach a wider public.
 
 This work emerges from the hypothesis that not all humans are sensitive to the same features and that the first question should be instead, what makes us like or dislike music?
@@ -34,11 +32,11 @@ My dataset is a combination of two playlists\
 You can build your own dataset and create a folder Dataset with two subfolders named Like and Dislike.
 The first step is making all songs to have the same length
 ```
-python .\data_processing.py 
+python .\data_processing.py
 ```
 To extract the features run:
-```
-python .\feature_extraction.py 
+```bash
+python main.py --task "build_dataset" --features timbre harmony rhythm
 ```
 
 For my experiment, all the features were stored as a pickle file
@@ -47,10 +45,49 @@ For my experiment, all the features were stored as a pickle file
 The results with learning machines can be found at the following notebook :
 [Notebook  :musical_keyboard:](supervising_my_musical_taste.ipynb)
 
+## Musical Features Used :headphones:
+To represent different aspects of music, we extracted the following features:
+
+### **Timbre** 🎨
+Timbre refers to the "color" or "texture" of a sound, which distinguishes different types of sound production (e.g., a piano vs. a guitar)
+- **Mel-frequency cepstral coefficients (MFCCs):** Capture the tonal quality of a sound.
+
+### **Harmony** 🎼
+ Harmony refers to the combination of different musical notes played or sung simultaneously, creating chords and chord progressions.
+- **Chromagram:** Represents harmonic content and chord progressions.
+
+### **Rhythm** 🥁
+Rhythm refers to the temporal structure of music, including tempo, beat, and rhythmic patterns.
+- **Zero-Crossing Rate:** Measures percussiveness by detecting rapid amplitude changes.
+- **Tempo (BPM):** Extracts the song’s beat per minute.
+- **Spectral Flux:** Measures rhythmic complexity by detecting spectral changes.
+- **Pulse Clarity:** Indicates the strength and regularity of the beat.
+
+### **Dynamics**
+Dynamics refers to the variation in loudness or intensity of the music over time.
+- **RMS (Root Mean Square) Error**: Represents the average power of the signal, which is a measure of loudness.
+
+These features help analyze how different aspects of a song contribute to musical preference.
+
+## Feature Analysis
+
+
+### **t-SNE Visualizations**
+
+<img src="docs/timbre_tsne.png" alt="Timbre" width="150" height="150" />
+<img src="docs/harmony_tsne.png" alt="Harmony" width="150" height="150" />
+<img src="docs/rhythm_tsne.png" alt="Rhythm" width="150" height="150" />
+<img src="docs/dynamics_tsne.png" alt="Dynamics" width="150" height="150" />
+
+### **Analysis of t-SNE Visualizations**
+- **Rhythm** appears to be the most discriminative feature, as it shows the clearest separation between "Like" and "Dislike" classes in the t-SNE plot.
+- **Timbre** and **Harmony** show some clustering but lack clear separation, suggesting they may need to be combined with other features to improve classification.
+- **Dynamics** seems to be the least discriminative feature on its own, as the t-SNE plot shows no clear patterns or separation.
+
 ## Multilayer Perceptron (MLP) :musical_note:
-In order to supervise the learning process of my musical taste I used a self created 
+In order to supervise the learning process of my musical taste I used a self created
 [Multilayer Perceptron ](https://github.com/IsitaRex/Supervising-My-Musical-Taste/blob/810f596b126773d3c525ab098154cfee992d2f46/Multilayer%20Perceptron/MLP.py)
-which receives a list of 
+which receives a list of
 [layers](https://github.com/IsitaRex/Supervising-My-Musical-Taste/blob/810f596b126773d3c525ab098154cfee992d2f46/Multilayer%20Perceptron/Layer.py) and a learning rate.
 
 ### Example model
@@ -58,3 +95,4 @@ To train a RNN with 100 epochs, a batch size of 32 and learning rate of 0.1 run:
 ```
 python main.py --epochs 100 --batch_size 32 --lr 0.1
 ```
+
