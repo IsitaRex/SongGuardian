@@ -39,12 +39,6 @@ To extract the features run:
 python main.py --task "build_dataset" --features timbre harmony rhythm
 ```
 
-For my experiment, all the features were stored as a pickle file
-[Dataset :musical_score:](dataset_features.pckl)
-
-The results with learning machines can be found at the following notebook :
-[Notebook  :musical_keyboard:](supervising_my_musical_taste.ipynb)
-
 ## Musical Features Used :headphones:
 To represent different aspects of music, we extracted the following features:
 
