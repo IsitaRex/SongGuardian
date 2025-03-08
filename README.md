@@ -84,15 +84,20 @@ These features help analyze how different aspects of a song contribute to musica
 - **Timbre** and **Dynamics** show some clustering but lack clear separation, suggesting they may need to be combined with other features to improve classification.
 - **Harmony** seems to be the least discriminative feature on its own, as the t-SNE plot shows no clear patterns or separation.
 
-## Multilayer Perceptron (MLP) :musical_note:
-In order to supervise the learning process of my musical taste I used a self created
-[Multilayer Perceptron ](https://github.com/IsitaRex/Supervising-My-Musical-Taste/blob/810f596b126773d3c525ab098154cfee992d2f46/Multilayer%20Perceptron/MLP.py)
-which receives a list of
-[layers](https://github.com/IsitaRex/Supervising-My-Musical-Taste/blob/810f596b126773d3c525ab098154cfee992d2f46/Multilayer%20Perceptron/Layer.py) and a learning rate.
+## Model training
+To finally determine the most discriminative feature using high dimensional spaces, I trained a RNN using the different features. To replicate the experiments run
 
-### Example model
-To train a RNN with 100 epochs, a batch size of 32 and learning rate of 0.1 run:
-```
-python main.py --epochs 100 --batch_size 32 --lr 0.1
+``` Bash
+python main.py --epochs 500 --batch_size 32 --lr 0.001 --features timbre --use_wandb True 
 ```
 
+``` Bash
+python main.py --epochs 500 --batch_size 32 --lr 0.001 --features harmony --use_wandb True 
+```
+``` Bash
+python main.py --epochs 500 --batch_size 32 --lr 0.001 --features rhythm --use_wandb True 
+```
+
+``` Bash
+python main.py --epochs 500 --batch_size 32 --lr 0.001 --features dynamics --use_wandb True 
+```
