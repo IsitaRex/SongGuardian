@@ -45,8 +45,8 @@ class SongsDataset(Dataset):
         """Extract MFCC-based timbre features (mean, std, max, min)."""
         mfcc = torchaudio.transforms.MFCC(
             sample_rate=sample_rate, 
-            n_mfcc=13,
-            melkwargs={"n_fft": 400, "hop_length": 160, "n_mels": 128, "center": False}
+            n_mfcc=14,
+            melkwargs={"n_fft": 400, "hop_length": 160, "n_mels": 23, "center": False}
         )(signal)
         mean = torch.mean(mfcc, dim=2)
         std = torch.std(mfcc, dim=2)
@@ -161,4 +161,15 @@ def build_dataset(path, features=["timbre"], sample_rate=44100, device='cpu'):
     suffix = "_".join(features)
     torch.save(features_tensor, f"{path}/Features/{suffix}.pt")
     torch.save(labels_tensor, f"{path}/Features/labels.pt")
-    
+
+def get_dataloaders(path, config):
+    batch_size = config['batch_size']
+    sample_rate = config['sample_rate']
+    device = config['device']
+    dataset = SongsDataset(path=path, features=config["features"], sample_rate=sample_rate, device=device)
+    train_size = int(0.8 * len(dataset))
+    test_size = len(dataset) - train_size
+    train_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size, test_size])
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
+    return train_loader, test_loader

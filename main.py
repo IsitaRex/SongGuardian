@@ -26,8 +26,6 @@ def main(config: dict):
         data_utils.build_dataset("data", config["features"])
     elif config["task"] == "RNN":
         utils.task_rnn(config)
-    elif config["task"] == "CNN":
-        utils.task_cnn(config)
     else:
         raise ValueError("Task not found.")
 

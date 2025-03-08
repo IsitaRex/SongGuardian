@@ -1,48 +1,29 @@
-import wandb
 import torch
+
 import src.utils as utils
 import src.models as models
 import src.data_utils as data_utils
-
 SEED = 121212
 
 
 torch.manual_seed(SEED)
 torch.cuda.manual_seed(SEED)
 
-def create_artifact(config):
-    # create an artifact for the data
-    data_artifact = wandb.Artifact('data', type='dataset')
-    # add the mp3 files to the artifact and the labels
-    data_artifact.add_dir('data/Like', name='data/Like')
-    data_artifact.add_dir('data/Dislike', name='data/Dislike')
-    # log the artifact to wandb
-    wandb.log_artifact(data_artifact)
-
 
 def task_rnn(config):
     '''
     Task to train a RNN model.
     '''
-
+    if config["features"] is None:
+        raise ValueError("Error: --features must be specified when task is 'task_rnn'.")
     path = "data/"
     train_loader, test_loader = data_utils.get_dataloaders(path,config)
-    model = models.RNN(80, 3, 3, num_classes = 2, device = config['device'])
+    # get input size
+    input_size = train_loader.dataset[0][0].shape[1]
+    model = models.RNN(input_size, 3, 3, num_classes = 2, device = config['device'])
     optimizer = torch.optim.Adam(model.parameters(), lr=config['lr'])
     criterion = torch.nn.CrossEntropyLoss()
     model, train_losses, test_losses, test_accs = utils.training_loop(model, train_loader, test_loader, optimizer, criterion, config['epochs'], config['device'])
     # save the model in model directory
-    torch.save(model.state_dict(), "models/rnn.pt")
-    return model, train_losses, test_losses, test_accs
-
-def task_cnn(config):
-    '''S
-    Task to train a CNN model.
-    '''
-    path = "data/"
-    train_loader, test_loader = data_utils.get_dataloaders(path, config)
-    model = models.CNN()
-    optimizer = torch.optim.Adam(model.parameters(), lr=config['lr'])
-    criterion = torch.nn.CrossEntropyLoss()
-    model, train_losses, test_losses, test_accs = utils.training_loop(model, train_loader, test_loader, optimizer, criterion, config['epochs'], config['device'])
+    torch.save(model.state_dict(), "models/rnn_0.0005.pt")
     return model, train_losses, test_losses, test_accs
