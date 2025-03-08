@@ -45,7 +45,7 @@ def train(model, train_loader, optimizer, criterion, epoch, device):
   return model, train_loss
  
 
-def test(model, test_loader, criterion, device):
+def test(model, test_loader, criterion, device, confusion_matrix = False):
   '''
   Test the model.
   
@@ -62,27 +62,46 @@ def test(model, test_loader, criterion, device):
     precision: precision score
     recall: recall score
   '''
-  # TODO: add confusion matrix and log it to wandb
 
   model.eval()
   test_loss = 0
   correct = 0
+  TP, FP, TN, FN = 0, 0, 0, 0
+
+  if confusion_matrix:
+     ground_truth = []
+     predictions = []
   with torch.no_grad():
       for data, target in test_loader:
           data, target = data.to(device), target.to(device)
           output = model(data)
           output = output.float()
           test_loss += criterion(output, target).item()  # sum up batch loss
-          #pred = output  # get the index of the max log-probability
-          #correct += pred.eq(target.view_as(pred)).sum().item()
           correct += (output.argmax(dim=-1) == target).sum()
-  # get f1 score, precision, recall
-  
-  f1 = f1_score(target, output.argmax(dim=-1), average='macro')
-  precision = precision_score(target, output.argmax(dim=-1), average='macro')
-  recall = recall_score(target, output.argmax(dim=-1), average='macro')
+
+          # compute batch true positives, false positives, true negatives, false negatives
+          TP += ((output.argmax(dim=-1) == 1) & (target == 1)).sum()
+          FP += ((output.argmax(dim=-1) == 1) & (target == 0)).sum()
+          TN += ((output.argmax(dim=-1) == 0) & (target == 0)).sum()
+          FN += ((output.argmax(dim=-1) == 0) & (target == 1)).sum()
+
+          if confusion_matrix:
+            ground_truth.extend(target.tolist())
+            predictions.extend(output.argmax(dim=-1).tolist())
+          
   test_loss /= len(test_loader.dataset)
   
+
+  precision = TP / (TP + FP)
+  recall = TP / (TP + FN)
+  f1 = 2 * precision * recall / (precision + recall)
+
+  
+  if confusion_matrix:
+    wandb.log({"conf_mat" : wandb.plot.confusion_matrix(probs=None,
+                        y_true=ground_truth, preds=predictions,
+                        class_names=['like', 'dislike'])})
+
   return model, test_loss, correct, f1, precision, recall
 
 def training_loop(model, train_loader, test_loader, optimizer, criterion, epochs, device):
@@ -115,5 +134,8 @@ def training_loop(model, train_loader, test_loader, optimizer, criterion, epochs
       test_accs.append(correct/len(test_loader.dataset))
       wandb.log({"train_loss": train_loss, "test_loss": test_loss, "test_acc": correct/len(test_loader.dataset)})
       wandb.log({"f1": f1, "precision": precision, "recall": recall})
+
+  # Do a final test run and log the confusion matrix
+  test(model, test_loader, criterion, device, confusion_matrix=True)
 
   return model, train_losses, test_losses, test_accs

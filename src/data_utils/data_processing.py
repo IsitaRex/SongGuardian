@@ -27,8 +27,10 @@ def cut_song(path: str, name: str, class_num: bool):
     # new file portion.mp3 is saved at required location
 
 
-# Read all songs and cut them into 1 min long
 def cut_dataset():
+    '''
+    This function cuts all the songs in the dataset
+    '''
     class_ = ["data/Like/" , "data/Dislike/"]
     class_num = 0
     for cla in class_:
