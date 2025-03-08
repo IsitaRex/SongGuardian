@@ -74,12 +74,15 @@ These features help analyze how different aspects of a song contribute to musica
 
 ### **t-SNE Visualizations**
 
-<img src="docs/timbre_tsne.png" alt="Timbre" width="150" height="150" /> <img src="docs/harmony_tsne.png" alt="Harmony" width="150" height="150" /> <img src="docs/rhythm_tsne.png" alt="Rhythm" width="150" height="150" /> <img src="docs/dynamics_tsne.png" alt="Dynamics" width="150" height="150" />
+<img src="docs/timbre_tsne.png" alt="Timbre" width="250" height="250" /> 
+<img src="docs/harmony_tsne.png" alt="Harmony" width="250" height="250" /> 
+<img src="docs/rhythm_tsne.png" alt="Rhythm" width="250" height="250" /> 
+<img src="docs/dynamics_tsne.png" alt="Dynamics" width="250" height="250" />
 
 ### **Analysis of t-SNE Visualizations**
 - **Rhythm** appears to be the most discriminative feature, as it shows the clearest separation between "Like" and "Dislike" classes in the t-SNE plot.
-- **Timbre** and **Harmony** show some clustering but lack clear separation, suggesting they may need to be combined with other features to improve classification.
-- **Dynamics** seems to be the least discriminative feature on its own, as the t-SNE plot shows no clear patterns or separation.
+- **Timbre** and **Dynamics** show some clustering but lack clear separation, suggesting they may need to be combined with other features to improve classification.
+- **Harmony** seems to be the least discriminative feature on its own, as the t-SNE plot shows no clear patterns or separation.
 
 ## Multilayer Perceptron (MLP) :musical_note:
 In order to supervise the learning process of my musical taste I used a self created
