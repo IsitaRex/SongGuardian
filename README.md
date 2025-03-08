@@ -74,10 +74,7 @@ These features help analyze how different aspects of a song contribute to musica
 
 ### **t-SNE Visualizations**
 
-<img src="docs/timbre_tsne.png" alt="Timbre" width="150" height="150" />
-<img src="docs/harmony_tsne.png" alt="Harmony" width="150" height="150" />
-<img src="docs/rhythm_tsne.png" alt="Rhythm" width="150" height="150" />
-<img src="docs/dynamics_tsne.png" alt="Dynamics" width="150" height="150" />
+<img src="docs/timbre_tsne.png" alt="Timbre" width="150" height="150" /> <img src="docs/harmony_tsne.png" alt="Harmony" width="150" height="150" /> <img src="docs/rhythm_tsne.png" alt="Rhythm" width="150" height="150" /> <img src="docs/dynamics_tsne.png" alt="Dynamics" width="150" height="150" />
 
 ### **Analysis of t-SNE Visualizations**
 - **Rhythm** appears to be the most discriminative feature, as it shows the clearest separation between "Like" and "Dislike" classes in the t-SNE plot.
